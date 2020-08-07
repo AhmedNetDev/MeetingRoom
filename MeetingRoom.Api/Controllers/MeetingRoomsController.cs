@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MeetingRoom.Api.Data;
 using MeetingRoom.Api.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,7 @@ namespace MeetingRoom.Api.Controllers
 {
     [ApiController]
     [EnableCors("CorsPolicy")]
+    [Authorize]
     [Route("api/[controller]")]
     public class MeetingRoomsController : ControllerBase
     {

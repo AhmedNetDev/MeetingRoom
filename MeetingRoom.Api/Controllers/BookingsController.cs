@@ -6,6 +6,7 @@ using AutoMapper;
 using MeetingRoom.Api.Data;
 using MeetingRoom.Api.Dtos;
 using MeetingRoom.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,7 @@ namespace MeetingRoom.Api.Controllers
 {
     [ApiController]
     [EnableCors("CorsPolicy")]
+    [Authorize]
     [Route("api/[controller]")]
     public class BookingsController : ControllerBase
     {
@@ -48,9 +50,9 @@ namespace MeetingRoom.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<BookingDto> CreateCommand([FromBody] BookingDto commandCreateDto)
+        public ActionResult<BookingDto> CreateBooking([FromBody] BookingDto bookingCreateDto)
         {
-            var bookingModel = _mapper.Map<Booking>(commandCreateDto);
+            var bookingModel = _mapper.Map<Booking>(bookingCreateDto);
             _repository.CreateBooking(bookingModel);
             _repository.SaveChanges();
 
@@ -60,7 +62,7 @@ namespace MeetingRoom.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteCommand(int id)
+        public ActionResult DeleteBooking(int id)
         {
             var bookingModel = _repository.GetBookingById(id);
 

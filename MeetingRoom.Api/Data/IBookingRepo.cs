@@ -12,7 +12,7 @@ namespace MeetingRoom.Api.Data
 
         IEnumerable<Booking> GetAllBookings();
         Booking GetBookingById(int id);
-        void CreateBooking(Booking cmd);
-        void DeleteBooking(Booking cmd);
+        void CreateBooking(Booking booking);
+        void DeleteBooking(Booking booking);
     }
 }

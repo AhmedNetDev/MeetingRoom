@@ -31,10 +31,6 @@ class Meetings extends Component {
       });
   }
 
-  componentDidUpdate() {
-    this.refreshList();
-  }
-
   //Delete meeting
   delMeeting = (id) => {
     if (window.confirm("Are you sure ?")) {
@@ -59,6 +55,36 @@ class Meetings extends Component {
           }
         });
     }
+  };
+
+  //Add Meeting
+  addMeeting = (event) => {
+    axios
+      .post("https://localhost:44388/api/Bookings", {
+        date: event.target.date.value,
+        name: event.target.name.value,
+        email: event.target.email.value,
+        subject: event.target.subject.value,
+        start: event.target.start.value,
+        end: event.target.end.value,
+        meetingRoomId: parseInt(event.target.meetingRoomId.value),
+      })
+      .then((res) =>
+        this.setState(
+          this.setState({ meetings: [...this.state.meetings, res.data] })
+        )
+      )
+      .catch((error) => {
+        if (error.message !== null) {
+          this.setState({
+            errorMessage: error.message,
+          });
+        } else {
+          this.setState({
+            errorMessage: null,
+          });
+        }
+      });
   };
 
   render() {
@@ -117,6 +143,7 @@ class Meetings extends Component {
           </Button>
 
           <AddMeetingModal
+            addMeeting={this.addMeeting}
             show={this.state.addModalShow}
             onHide={addModalClose}
           />

@@ -3,12 +3,11 @@ import { Modal, Button, Row, Col, Form } from "react-bootstrap";
 import ErrorMessages from "../components/layout/ErrorMessages";
 import { timehours } from "../helpers/timeschedule";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 class AddMeetingModal extends Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.isValidMeetingInput = this.isValidMeetingInput.bind(this);
     this.state = { meetingrooms: [], meetings: [], errorMessage: null };
   }
 
@@ -48,27 +47,7 @@ class AddMeetingModal extends Component {
     e.preventDefault();
 
     if (this.isValidMeetingInput(this.state.meetings, e)) {
-      axios
-        .post("https://localhost:44388/api/Bookings", {
-          date: e.target.date.value,
-          name: e.target.name.value,
-          email: e.target.email.value,
-          subject: e.target.subject.value,
-          start: e.target.start.value,
-          end: e.target.end.value,
-          meetingRoomId: parseInt(e.target.meetingRoomId.value),
-        })
-        .catch((error) => {
-          if (error.message !== null) {
-            this.setState({
-              errorMessage: error.message,
-            });
-          } else {
-            this.setState({
-              errorMessage: null,
-            });
-          }
-        });
+      this.props.addMeeting(e);
     }
   };
 
@@ -83,6 +62,7 @@ class AddMeetingModal extends Component {
         parseInt(meeting.meetingRoomId) === meetingRoomId &&
         meeting.date.substr(0, 10) === date.substr(0, 10)
     );
+    console.log(meetingsconcernedroom);
     const found = meetingsconcernedroom.find(
       (meeting) =>
         (parseInt(meeting.start) <= start && parseInt(meeting.end) > start) ||
@@ -212,5 +192,11 @@ class AddMeetingModal extends Component {
     );
   }
 }
+
+//PropTypes
+AddMeetingModal.propTypes = {
+  addMeeting: PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
+};
 
 export default AddMeetingModal;
